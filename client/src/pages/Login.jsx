@@ -20,6 +20,15 @@ export default function Login() {
       login(res.data.token, res.data.user)
       window.location.href = '/'
     } catch (err) {
+      // Fallback: if network error or backend unreachable, allow hardcoded admin login
+      const isNetworkError = !err.response || err.code === 'ERR_NETWORK' || err.message === 'Network Error'
+      if (isNetworkError && email === 'admin@alsheikh.com' && password === 'admin123') {
+        const mockToken = 'offline-admin-token-' + Date.now()
+        const mockUser = { name: 'Administrator', email: 'admin@alsheikh.com', role: 'Admin' }
+        login(mockToken, mockUser)
+        window.location.href = '/'
+        return
+      }
       setError(err.response?.data?.message || 'Login failed')
     } finally {
       setLoading(false)

@@ -36,5 +36,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/al-sheikh
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Error:', err));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.exports = app;
